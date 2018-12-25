@@ -1,11 +1,11 @@
-package com.android.freak.appupdatautils.net;
+package com.android.freak.appupdateutils.net;
 
 
 
 
 
 
-import com.android.freak.appupdatautils.app.Constants;
+import com.android.freak.appupdateutils.app.Constants;
 
 import java.util.concurrent.TimeUnit;
 

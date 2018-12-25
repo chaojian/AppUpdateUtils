@@ -1,4 +1,4 @@
-package com.android.freak.appupdatautils.bean;
+package com.android.freak.appupdateutils.bean;
 
 /**
  * Created by Administrator on 2018/12/25.

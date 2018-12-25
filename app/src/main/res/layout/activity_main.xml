@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.freak.appupdatautils.MainActivity">
-
+    tools:context="com.android.freak.appupdateutils.MainActivity">
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="登录"
+    android:onClick="login"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

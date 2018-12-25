@@ -1,4 +1,4 @@
-package com.android.freak.appupdatautils.net;
+package com.android.freak.appupdateutils.net;
 
 public class ApiException extends RuntimeException {
     public static final int USER_NOT_EXIST = 100;

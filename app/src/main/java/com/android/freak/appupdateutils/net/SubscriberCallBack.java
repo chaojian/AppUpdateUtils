@@ -1,4 +1,4 @@
-package com.android.freak.appupdatautils.net;
+package com.android.freak.appupdateutils.net;
 
 import android.util.Log;
 

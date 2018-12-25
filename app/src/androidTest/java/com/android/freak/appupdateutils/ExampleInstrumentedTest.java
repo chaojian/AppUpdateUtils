@@ -1,4 +1,4 @@
-package com.android.freak.appupdatautils;
+package com.android.freak.appupdateutils;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,4 +1,4 @@
-package com.android.freak.appupdatautils.net;
+package com.android.freak.appupdateutils.net;
 
 public interface ApiCallback<T> {
     void onSuccess(T model);

@@ -1,4 +1,4 @@
-package com.android.freak.appupdatautils.net;
+package com.android.freak.appupdateutils.net;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -46,22 +46,27 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
                 .subscribe(subscriber));
     }
 
-    /**
-     * 附加view
-     *
-     * @param view
-     */
     @Override
-    public void attachView(T view) {
-        this.mView = view;
+    public void start() {
+
     }
 
-    /**
-     * 分离view
-     */
-    @Override
-    public void detachView() {
-        this.mView = null;
-        unSubscribe();
-    }
+//    /**
+//     * 附加view
+//     *
+//     * @param view
+//     */
+//    @Override
+//    public void attachView(T view) {
+//        this.mView = view;
+//    }
+//
+//    /**
+//     * 分离view
+//     */
+//    @Override
+//    public void detachView() {
+//        this.mView = null;
+//        unSubscribe();
+//    }
 }
