@@ -4,8 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.android.freak.appupdateutils.appupdateutils.ApkInfoBean;
+import com.android.freak.appupdateutils.appupdateutils.AppUtils;
 import com.android.freak.appupdateutils.bean.FrequentlyBean;
-import com.android.freak.appupdateutils.bean.LoginBean;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -38,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     public void login(View view) {
-        mPresenter.doLogin();
+//        mPresenter.doLogin();
+        ApkInfoBean apkInfoBean=new ApkInfoBean();
+        apkInfoBean.setForce(false);
+        apkInfoBean.setApkURL("https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk");
+        new AppUtils(this).showUpdateDialog(apkInfoBean);
+//        AppUtils.installApk(this,"https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk");
     }
 }

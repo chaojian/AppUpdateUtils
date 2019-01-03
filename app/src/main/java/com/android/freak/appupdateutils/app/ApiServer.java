@@ -9,16 +9,22 @@ import com.android.freak.appupdateutils.net.HttpResult;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 import rx.Observable;
 
 public interface ApiServer {
 
-    @GET("app/user/login")
-    Observable<HttpResult<List<FrequentlyBean>>> login(@Query("org_number") String org_number,
-                                                       @Query("user_mobile") String user_mobile,
-                                                       @Query("user_password") String user_password);
+    @GET("wxarticle/chapters/json")
+    Observable<HttpResult<List<FrequentlyBean>>> login();
 
-
+    /**
+     * apk文件下载
+     */
+    @Streaming
+    @GET
+    Observable<ResponseBody> downloadApk(@Url String apkUrl);
 }

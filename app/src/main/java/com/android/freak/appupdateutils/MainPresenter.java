@@ -35,19 +35,19 @@ public class MainPresenter extends RxPresenter implements MainContract.Presenter
 
     @Override
     public void doLogin() {
-        Observable observable = apiServer.login(Constants.org_number, Constants.user_mobile, Constants.user_password).map(new HttpResultFunc<List<FrequentlyBean>>());
-        addSubscription(observable, new SubscriberCallBack(new ApiCallback<List<FrequentlyBean>>() {
-            @Override
-            public void onSuccess(List<FrequentlyBean> model) {
-                Logger.d(model);
-                mView.onSuccess(model);
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                Log.e("TAG", msg);
-            }
-        }));
+//        Observable observable = apiServer.login(Constants.org_number, Constants.user_mobile, Constants.user_password).map(new HttpResultFunc<List<FrequentlyBean>>());
+//        addSubscription(observable, new SubscriberCallBack(new ApiCallback<List<FrequentlyBean>>() {
+//            @Override
+//            public void onSuccess(List<FrequentlyBean> model) {
+//                Logger.d(model);
+//                mView.onSuccess(model);
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                Log.e("TAG", msg);
+//            }
+//        }));
 
     }
 }
