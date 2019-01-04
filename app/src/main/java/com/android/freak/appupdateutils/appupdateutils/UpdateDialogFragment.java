@@ -1,8 +1,8 @@
 package com.android.freak.appupdateutils.appupdateutils;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.view.View;
@@ -57,7 +57,7 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
         progressBar = (NumberProgressBar) mDetailDialog.findViewById(R.id.progress_bar);
 
         progressBar.setOnProgressBarListener(this);
-
+        progressBar.setProgressTextColor(R.color.colorAccent);
         //标题
         TextView tvUpdateTitle = (TextView) mDetailDialog.findViewById(R.id.tv_update_title);
         tvUpdateTitle.setText(getResources().getString(R.string.app_update_title, mApkInfoBean.getVersionName()));
@@ -144,8 +144,14 @@ public class UpdateDialogFragment extends DialogFragment implements View.OnClick
     }
 
     public interface OnTipsListener {
+        /**
+         * 取消更新
+         */
         void onCancel();
 
+        /**
+         * 现在更新
+         */
         void onSucceed();
     }
 

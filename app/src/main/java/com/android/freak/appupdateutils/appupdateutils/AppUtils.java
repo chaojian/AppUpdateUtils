@@ -12,8 +12,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Process;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -40,29 +44,249 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * app更新工具类
+ *
  * @author Administrator
  * @date 2019/1/2
  */
 
 public class AppUtils {
     private final String TAG = "AppUtils";
+    /**
+     * 保存文件路径
+     */
     private String savePath;
+    /**
+     * 8.0以下notify builder
+     */
     private NotificationCompat.Builder builder;
+    /**
+     * 8.0以上notify builder
+     */
     private Notification.Builder mBuilder;
     private NotificationManager notificationManager;
-    private int notifyId = 100;
+    /**
+     * 下载进度
+     */
     private int preProgress;
-    private boolean downloading = false;
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
     private UpdateDialogFragment updateDialogFragment;
-    Notification notification = null;
-    private static final int PUSH_NOTIFICATION_ID = (0x001);
+    private Notification notification = null;
+    private static final int PUSH_NOTIFICATION_ID = 100;
     private static final String PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID";
     private static final String PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME";
+    private NumberProgressBar mNumberProgressBar;
 
+    /**
+     * 版本号
+     */
+    private Integer versionCode;
 
-    public AppUtils(Activity activity) {
+    /**
+     * 版本名
+     */
+    private String versionName;
+
+    /**
+     * 是否强制更新
+     */
+    private Boolean isForce;
+
+    /**
+     * 版本信息
+     */
+    private String versionInfo;
+
+    /**
+     * apk路径
+     */
+    private String apkURL;
+
+    /**
+     * apk大小
+     */
+    private Long apkSize;
+
+    /**
+     * 新增
+     */
+    private String addContent;
+
+    /**
+     * 修复
+     */
+    private String fixContent;
+
+    /**
+     * 取消
+     */
+    private String cancelContent;
+
+    /**
+     * 更新时间
+     */
+    private String createDate;
+
+    /**
+     * 文件名
+     */
+    private String fileName;
+    /**
+     * 下载域名
+     */
+    private String baseUrl;
+
+    /**
+     * 初始化
+     *
+     * @param activity
+     */
+    public AppUtils(@Nullable AppCompatActivity activity, String baseUrl) {
         mActivity = activity;
+        this.baseUrl = baseUrl;
+    }
+
+    /**
+     * 设置版本号
+     *
+     * @param versionCode 版本号
+     */
+    public AppUtils setVersionCode(Integer versionCode) {
+        this.versionCode = versionCode;
+        return this;
+    }
+
+    /**
+     * 设置版本名
+     *
+     * @param versionName
+     */
+    public AppUtils setVersionName(String versionName) {
+        this.versionName = versionName;
+        return this;
+    }
+
+    /**
+     * 设置是否强制更新
+     *
+     * @param force
+     */
+    public AppUtils setForce(Boolean force) {
+        isForce = force;
+        return this;
+    }
+
+    /**
+     * 设置版本信息
+     *
+     * @param versionInfo 版本信息
+     */
+    public AppUtils setVersionInfo(String versionInfo) {
+        this.versionInfo = versionInfo;
+        return this;
+    }
+
+    /**
+     * 设置apk下载地址
+     *
+     * @param apkURL
+     */
+    public AppUtils setApkURL(@Nullable String apkURL) {
+        this.apkURL = apkURL;
+        return this;
+    }
+
+    /**
+     * 设置apk下载大小
+     *
+     * @param apkSize apk内存大小
+     */
+    public AppUtils setApkSize(Long apkSize) {
+        this.apkSize = apkSize;
+        return this;
+    }
+
+    /**
+     * 设置新增内容
+     *
+     * @param addContent
+     */
+    public AppUtils setAddContent(String addContent) {
+        this.addContent = addContent;
+        return this;
+    }
+
+    /**
+     * 设置修复内容
+     *
+     * @param fixContent
+     */
+    public AppUtils setFixContent(String fixContent) {
+        this.fixContent = fixContent;
+        return this;
+    }
+
+    /**
+     * 设置取消内容
+     *
+     * @param cancelContent
+     */
+    public AppUtils setCancelContent(String cancelContent) {
+        this.cancelContent = cancelContent;
+        return this;
+    }
+
+    /**
+     * 设置更新时间
+     *
+     * @param createDate
+     */
+    public AppUtils setCreateDate(String createDate) {
+        this.createDate = createDate;
+        return this;
+    }
+
+    /**
+     * 设置apk文件名
+     *
+     * @param fileName
+     */
+    public AppUtils setFileName(String fileName) {
+        this.fileName = fileName;
+        return this;
+    }
+
+    public void build() {
+        if (versionCode > getVersionCode(mActivity)) {
+            ApkInfoBean apkInfoBean = new ApkInfoBean();
+            apkInfoBean.setVersionCode(versionCode);
+            apkInfoBean.setVersionName(versionName);
+            apkInfoBean.setForce(isForce);
+            apkInfoBean.setVersionInfo(versionInfo);
+            apkInfoBean.setApkURL(apkURL);
+            apkInfoBean.setApkSize(apkSize);
+            apkInfoBean.setAddContent(addContent);
+            apkInfoBean.setFixContent(fixContent);
+            apkInfoBean.setCancelContent(cancelContent);
+            apkInfoBean.setCreateDate(createDate);
+            apkInfoBean.setFileName(fileName);
+            showUpdateDialog(apkInfoBean);
+        } else {
+            Log.d(TAG, "当前是最新版本");
+        }
+    }
+
+    /**
+     * 获取进度条实例
+     *
+     * @return
+     */
+    public NumberProgressBar getProgressBarInstance() {
+        if (mNumberProgressBar == null) {
+            mNumberProgressBar = new NumberProgressBar(mActivity);
+            return mNumberProgressBar;
+        } else {
+            return mNumberProgressBar;
+        }
     }
 
     /**
@@ -76,7 +300,6 @@ public class AppUtils {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
-
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -94,10 +317,10 @@ public class AppUtils {
             updateDialogFragment = UpdateDialogFragment.newInstance(apkInfoBean);
         }
 
-
         updateDialogFragment.setOnConfirmListener(new UpdateDialogFragment.OnTipsListener() {
             @Override
             public void onCancel() {
+                //是否开启强制更新，已开启的话不更新则强制退出软件
                 if (apkInfoBean.getForce()) {
                     //退出
                     updateDialogFragment.dismiss();
@@ -111,13 +334,11 @@ public class AppUtils {
             @Override
             public void onSucceed() {
                 //开始下载
-                startDownloadApk(apkInfoBean.getApkURL(), TextUtils.isEmpty(apkInfoBean.getFileName()) ? "jiuchasheng.apk" : apkInfoBean.getFileName());
+                startDownloadApk(baseUrl, apkInfoBean.getApkURL(), TextUtils.isEmpty(apkInfoBean.getFileName()) ? "appUpdate.apk" : apkInfoBean.getFileName());
                 updateDialogFragment.setProgressBarVisibility(View.VISIBLE);
-                downloading = true;
+                //初始化通知栏
                 initNotification();
-
                 updateDialogFragment.disableClick(false);
-
             }
         });
 
@@ -127,21 +348,22 @@ public class AppUtils {
         }
 
         if (!updateDialogFragment.isAdded()) {
-            android.app.FragmentManager fm = mActivity.getFragmentManager();
-            android.app.FragmentTransaction ft = fm.beginTransaction();
-            ft.add(updateDialogFragment, UpdateDialogFragment.class.getSimpleName());
-            ft.commitAllowingStateLoss();
+            FragmentManager supportFragmentManager = mActivity.getSupportFragmentManager();
+            FragmentTransaction transaction = supportFragmentManager.beginTransaction();
+            transaction.add(updateDialogFragment, UpdateDialogFragment.class.getSimpleName());
+            transaction.commitAllowingStateLoss();
         }
     }
 
     /**
      * 下载Apk文件
+     *
      * @param apkURL 下载地址
-     * @param name apk名字
+     * @param name   apk名字
      */
-    public void startDownloadApk(String apkURL, String name) {
+    public void startDownloadApk(String baseUrl, String apkURL, String name) {
 
-        ApiServer apiService = DownloadHelper.getInstance().createApiService(ApiServer.class, new DownloadProgressListener());
+        ApiServer apiService = DownloadHelper.getInstance().createApiService(ApiServer.class, baseUrl, new DownloadProgressListener());
 
         savePath = mActivity.getExternalFilesDir(null) + File.separator + name;
         apiService.downloadApk(apkURL).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(new Action1<ResponseBody>() {
@@ -163,7 +385,6 @@ public class AppUtils {
                                     Log.e(TAG, "apk保存失败");
                                     cancelNotification();
                                 }
-                                downloading = false;
                                 updateDialogFragment.dismiss();
                             }
                         }, new Action1<Throwable>() {
@@ -172,7 +393,6 @@ public class AppUtils {
                                 if (throwable != null && !TextUtils.isEmpty(throwable.getLocalizedMessage())) {
                                     throwable.printStackTrace();
                                     Log.d(TAG, "apk保存过程出错" + throwable.getLocalizedMessage());
-                                    downloading = false;
                                     updateDialogFragment.dismiss();
                                     cancelNotification();
                                 }
@@ -185,7 +405,6 @@ public class AppUtils {
                 if (throwable != null && !TextUtils.isEmpty(throwable.getLocalizedMessage())) {
                     throwable.printStackTrace();
                     Log.d(TAG, "下载出错" + throwable.getLocalizedMessage());
-                    downloading = false;
                     updateDialogFragment.dismiss();
                     cancelNotification();
                 }
@@ -203,7 +422,6 @@ public class AppUtils {
             mActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    downloading = !done;
                     if (bytesRead != 0) {
                         int progress = (int) ((bytesRead * 100) / contentLength);
                         updateDialogFragment.setProgress(progress);
@@ -215,6 +433,14 @@ public class AppUtils {
                         it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         File file = new File(savePath);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            /**
+                             * authority参数 如果直接设置为applicationId.fileProvider,
+                             *  例如我的applicationId是com.android.freak.appupdatautils，则就是直接设置authority参数为com.android.freak.appupdatautils.fileProvider
+                             *  则会报java空指针异常：java.lang.NullPointException
+                             *  以为是要的配置文件的包不一致导致，所以改为以下方式
+                             *  BuildConfig.APPLICATION_ID + ".fileProvider"
+                             *  注意：BuildConfig的导包是这个项目的，不要导包错误
+                             */
                             Uri apkUri = FileProvider.getUriForFile(mActivity, BuildConfig.APPLICATION_ID + ".fileProvider", file);
                             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             it.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -224,6 +450,12 @@ public class AppUtils {
                             it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         }
                         PendingIntent pendingIntent = PendingIntent.getActivity(mActivity.getBaseContext(), 0, it, PendingIntent.FLAG_UPDATE_CURRENT);
+                        /**
+                         * 在8.0版本手机中，notify的是不显示的 要通过以下步骤创建（注意：通知栏的权限要设置允许显示才能显示）
+                         * 1、定义通知id、通知渠道id、通知渠道名
+                         * 2、创建通知渠道
+                         * 3、创建通知并显示
+                         */
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             notification = mBuilder.
                                     setContentTitle("下载完成")
@@ -234,7 +466,7 @@ public class AppUtils {
                             builder.setContentTitle("下载完成").setContentText("点击安装").setContentIntent(pendingIntent);
                             notification = builder.build();
                         }
-                        notificationManager.notify(notifyId, notification);
+                        notificationManager.notify(PUSH_NOTIFICATION_ID, notification);
                     }
                 }
             });
@@ -263,7 +495,7 @@ public class AppUtils {
                     .setOngoing(true);
             notification = builder.build();
         }
-        notificationManager.notify(notifyId, notification);
+        notificationManager.notify(PUSH_NOTIFICATION_ID, notification);
 
     }
 
@@ -286,7 +518,7 @@ public class AppUtils {
                 builder.setProgress(100, (int) progress, false);
                 notification = builder.build();
             }
-            notificationManager.notify(notifyId, notification);
+            notificationManager.notify(PUSH_NOTIFICATION_ID, notification);
         }
         preProgress = (int) progress;
     }
@@ -295,7 +527,7 @@ public class AppUtils {
      * 取消通知
      */
     public void cancelNotification() {
-        notificationManager.cancel(notifyId);
+        notificationManager.cancel(PUSH_NOTIFICATION_ID);
     }
 
     /**
@@ -306,11 +538,8 @@ public class AppUtils {
      * @return
      */
     public static boolean installApk(Context context, String filePath) {
-
         setPermission(filePath);
-
         Log.e("INSTALL", "downloadDir:" + filePath);
-
         File file = new File(filePath);
         if (!file.exists() || !file.isFile() || file.length() <= 0) {
             Log.e("INSTALL", "文件不存在");
@@ -342,6 +571,11 @@ public class AppUtils {
         return true;
     }
 
+    /**
+     * 设置权限
+     *
+     * @param filePath
+     */
     public static void setPermission(String filePath) {
 
         String command = "chmod " + "777" + " " + filePath;
@@ -358,7 +592,7 @@ public class AppUtils {
     /**
      * 保存文件到本地
      *
-     * @param body 微信配置
+     * @param body
      * @return 保存结果
      */
     private boolean writeFileToSDCard(ResponseBody body, String path) {

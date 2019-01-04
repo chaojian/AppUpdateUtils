@@ -1,6 +1,8 @@
 package com.android.freak.appupdateutils.appupdateutils;
 
 
+import android.support.annotation.Nullable;
+
 import com.android.freak.appupdateutils.app.Constants;
 
 import java.io.IOException;
@@ -21,8 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class DownloadHelper {
-    //这是连接网络的时间
-    //原来是5s
+    /**
+     * 这是连接网络的时间
+     */
     private static final int DEFAULT_TIMEOUT = 10;
 
     private Retrofit retrofit;
@@ -38,21 +41,33 @@ public class DownloadHelper {
 
     }
 
-    //在访问时创建单例
+    /**
+     * 在访问时创建单例
+     */
     private static class SingletonHolder {
         private static final DownloadHelper INSTANCE = new DownloadHelper();
     }
 
 
-    //获取单例
+    /**
+     * 获取单例
+     * @return
+     */
     public static DownloadHelper getInstance() {
 
         return SingletonHolder.INSTANCE;
 
     }
 
-
-    public <S>S createApiService(Class<S> serviceClass, final ProgressListener progressListener){
+    /**
+     * 创建ApiService
+     * @param serviceClass
+     * @param baseUrl
+     * @param progressListener
+     * @param <S>
+     * @return
+     */
+    public <S>S createApiService(Class<S> serviceClass, @Nullable String baseUrl, final ProgressListener progressListener){
 
         builder.addNetworkInterceptor(new Interceptor() {
             @Override
@@ -73,7 +88,7 @@ public class DownloadHelper {
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(Constants.BASE_URL).build();
+                .baseUrl(baseUrl).build();
 
         return retrofit.create(serviceClass);
     }

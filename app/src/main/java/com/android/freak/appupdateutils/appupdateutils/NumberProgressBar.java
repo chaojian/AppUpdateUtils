@@ -15,10 +15,12 @@ import android.view.View;
 import com.android.freak.appupdateutils.R;
 
 import static com.android.freak.appupdateutils.appupdateutils.NumberProgressBar.ProgressTextVisibility.Invisible;
+import static com.android.freak.appupdateutils.appupdateutils.NumberProgressBar.ProgressTextVisibility.Visible;
 
 
 /**
- *  数字进度条
+ * 数字进度条
+ *
  * @author Administrator
  * @date 2019/1/2
  */
@@ -71,6 +73,7 @@ public class NumberProgressBar extends View {
     private static final String INSTANCE_TEXT_VISIBILITY = "text_visibility";
 
     private static final int PROGRESS_TEXT_VISIBLE = 0;
+    private static final int PROGRESS_TEXT_INVISIBLE = 1;
 
 
     /**
@@ -129,13 +132,18 @@ public class NumberProgressBar extends View {
 
     private boolean mIfDrawText = true;
 
+    private boolean mTextVisible = true;
+
     /**
      * Listener
      */
     private OnProgressBarListener mListener;
-    private ProgressTextVisibility visible;
 
     public enum ProgressTextVisibility {
+        /**
+         * Visible 显示
+         * Invisible 隐藏
+         */
         Visible, Invisible
     }
 
@@ -152,20 +160,24 @@ public class NumberProgressBar extends View {
         super(context, attrs, defStyleAttr);
 
 
-
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.NumberProgressBar,
                 defStyleAttr, 0);
-
+        //已完成进度颜色
         mReachedBarColor = attributes.getColor(R.styleable.NumberProgressBar_progress_reached_color, default_reached_color);
+        //未完成进度颜色
         mUnreachedBarColor = attributes.getColor(R.styleable.NumberProgressBar_progress_unreached_color, default_unreached_color);
+        //字体颜色
         mTextColor = attributes.getColor(R.styleable.NumberProgressBar_progress_text_color, default_text_color);
+        //字体大小
         mTextSize = attributes.getDimension(R.styleable.NumberProgressBar_progress_text_size, default_text_size);
-
+        //已完成进度高度
         mReachedBarHeight = attributes.getDimension(R.styleable.NumberProgressBar_progress_reached_bar_height, default_reached_bar_height);
+        //未完成进度高度
         mUnreachedBarHeight = attributes.getDimension(R.styleable.NumberProgressBar_progress_unreached_bar_height, default_unreached_bar_height);
+        //进度文字偏移量
         mOffset = attributes.getDimension(R.styleable.NumberProgressBar_progress_text_offset, default_progress_text_offset);
-
-        int textVisible = attributes.getInt(R.styleable.NumberProgressBar_progress_text_visibility, PROGRESS_TEXT_VISIBLE);
+        //是否显示文字进度
+        int textVisible = attributes.getInt(R.styleable.NumberProgressBar_progress_text_visibility, isTextVisible() ? PROGRESS_TEXT_VISIBLE : PROGRESS_TEXT_INVISIBLE);
         if (textVisible != PROGRESS_TEXT_VISIBLE) {
             mIfDrawText = false;
         }
@@ -181,8 +193,6 @@ public class NumberProgressBar extends View {
     public NumberProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
-
-
 
 
     @Override
@@ -244,6 +254,9 @@ public class NumberProgressBar extends View {
         }
     }
 
+    /**
+     * 初始化画笔工具
+     */
     private void initializePainters() {
         mReachedBarPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mReachedBarPaint.setColor(mReachedBarColor);
@@ -256,7 +269,9 @@ public class NumberProgressBar extends View {
         mTextPaint.setTextSize(mTextSize);
     }
 
-
+    /**
+     * 计算进度位置
+     */
     private void calculateDrawRectFWithoutProgressText() {
         mReachedRectF.left = getPaddingLeft();
         mReachedRectF.top = getHeight() / 2.0f - mReachedBarHeight / 2.0f;
@@ -269,6 +284,9 @@ public class NumberProgressBar extends View {
         mUnreachedRectF.bottom = getHeight() / 2.0f + mUnreachedBarHeight / 2.0f;
     }
 
+    /**
+     * 计算带进度文字位置
+     */
     private void calculateDrawRectF() {
 
         mCurrentDrawText = String.format("%d", getProgress() * 100 / getMax());
@@ -348,38 +366,73 @@ public class NumberProgressBar extends View {
         return mUnreachedBarHeight;
     }
 
+    /**
+     * 设置进度文字大小
+     *
+     * @param textSize
+     */
     public void setProgressTextSize(float textSize) {
         this.mTextSize = textSize;
         mTextPaint.setTextSize(mTextSize);
         invalidate();
     }
 
+    /**
+     * 设置进度文字颜色
+     *
+     * @param textColor
+     */
     public void setProgressTextColor(int textColor) {
         this.mTextColor = textColor;
         mTextPaint.setColor(mTextColor);
         invalidate();
     }
 
+    /**
+     * 设置未完成进度条颜色
+     *
+     * @param barColor
+     */
     public void setUnreachedBarColor(int barColor) {
         this.mUnreachedBarColor = barColor;
         mUnreachedBarPaint.setColor(mUnreachedBarColor);
         invalidate();
     }
 
+    /**
+     * 设置已完成进度条颜色
+     *
+     * @param progressColor
+     */
     public void setReachedBarColor(int progressColor) {
         this.mReachedBarColor = progressColor;
         mReachedBarPaint.setColor(mReachedBarColor);
         invalidate();
     }
 
+    /**
+     * 设置已完成进度条高度
+     *
+     * @param height
+     */
     public void setReachedBarHeight(float height) {
         mReachedBarHeight = height;
     }
 
+    /**
+     * 设置未完成进度条高度
+     *
+     * @param height
+     */
     public void setUnreachedBarHeight(float height) {
         mUnreachedBarHeight = height;
     }
 
+    /**
+     * 设置最大进度
+     *
+     * @param maxProgress
+     */
     public void setMax(int maxProgress) {
         if (maxProgress > 0) {
             this.mMaxProgress = maxProgress;
@@ -387,6 +440,11 @@ public class NumberProgressBar extends View {
         }
     }
 
+    /**
+     * 设置进度下标 例如 %
+     *
+     * @param suffix
+     */
     public void setSuffix(String suffix) {
         if (suffix == null) {
             mSuffix = "";
@@ -399,6 +457,11 @@ public class NumberProgressBar extends View {
         return mSuffix;
     }
 
+    /**
+     * 设置进度前缀 例如 50%的前缀就是50
+     *
+     * @param prefix
+     */
     public void setPrefix(String prefix) {
         if (prefix == null) {
             mPrefix = "";
@@ -416,7 +479,7 @@ public class NumberProgressBar extends View {
             setProgress(getProgress() + by);
         }
 
-        if(mListener != null){
+        if (mListener != null) {
             mListener.onProgressChange(getProgress(), getMax());
         }
     }
@@ -461,7 +524,7 @@ public class NumberProgressBar extends View {
             setProgress(bundle.getInt(INSTANCE_PROGRESS));
             setPrefix(bundle.getString(INSTANCE_PREFIX));
             setSuffix(bundle.getString(INSTANCE_SUFFIX));
-            setProgressTextVisibility(bundle.getBoolean(INSTANCE_TEXT_VISIBILITY) ? visible : Invisible);
+            setProgressTextVisibility(bundle.getBoolean(INSTANCE_TEXT_VISIBILITY) ? Visible : Invisible);
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATE));
             return;
         }
@@ -479,7 +542,7 @@ public class NumberProgressBar extends View {
     }
 
     public void setProgressTextVisibility(ProgressTextVisibility visibility) {
-        mIfDrawText = visibility == visible;
+        mIfDrawText = visibility == Visible;
         invalidate();
     }
 
@@ -487,8 +550,20 @@ public class NumberProgressBar extends View {
         return mIfDrawText;
     }
 
-    public void setOnProgressBarListener(OnProgressBarListener listener){
+    public void setOnProgressBarListener(OnProgressBarListener listener) {
         mListener = listener;
     }
 
+    public boolean isTextVisible() {
+        return mTextVisible;
+    }
+
+    /**
+     * 设置是否显示进度文字
+     * @param textVisible
+     */
+    public void setTextVisible(boolean textVisible) {
+        mTextVisible = textVisible;
+        invalidate();
+    }
 }

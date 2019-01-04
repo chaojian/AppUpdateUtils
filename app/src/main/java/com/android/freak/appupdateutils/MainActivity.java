@@ -39,11 +39,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     public void login(View view) {
-//        mPresenter.doLogin();
-        ApkInfoBean apkInfoBean=new ApkInfoBean();
-        apkInfoBean.setForce(false);
-        apkInfoBean.setApkURL("https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk");
-        new AppUtils(this).showUpdateDialog(apkInfoBean);
-//        AppUtils.installApk(this,"https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk");
+        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/");
+        appUtils.setApkURL("https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk")
+                .setForce(true)
+                .setFileName("蜂鸟普惠")
+                .setVersionCode(4)
+                .setVersionName("6.0.0")
+                .setAddContent("现场pos")
+                .build();
     }
 }
