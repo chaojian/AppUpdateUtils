@@ -1,12 +1,11 @@
 package com.android.freak.appupdateutils;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.android.freak.appupdateutils.appupdateutils.ApkInfoBean;
-import com.android.freak.appupdateutils.appupdateutils.AppUtils;
 import com.android.freak.appupdateutils.bean.FrequentlyBean;
+import com.freak.appupdateutils.appupdateutils.AppUtils;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;

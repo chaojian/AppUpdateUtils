@@ -1,26 +1,15 @@
 package com.android.freak.appupdateutils;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.android.freak.appupdateutils.app.ApiServer;
-import com.android.freak.appupdateutils.app.Constants;
-import com.android.freak.appupdateutils.bean.FrequentlyBean;
-import com.android.freak.appupdateutils.bean.LoginBean;
-import com.android.freak.appupdateutils.net.ApiCallback;
-import com.android.freak.appupdateutils.net.HttpMethods;
-import com.android.freak.appupdateutils.net.HttpResultFunc;
-import com.android.freak.appupdateutils.net.RxPresenter;
-import com.android.freak.appupdateutils.net.SubscriberCallBack;
-import com.orhanobut.logger.Logger;
+import com.android.freak.appupdateutils.app.MyApiServer;
+import com.freak.mvphttphelper.net.RxPresenter;
 
-import java.util.List;
-
-import rx.Observable;
+import static com.freak.mvphttphelper.net.HttpMethods.getInstance;
 
 
 public class MainPresenter extends RxPresenter implements MainContract.Presenter {
-    ApiServer apiServer = HttpMethods.getInstance().create(ApiServer.class);
+    MyApiServer apiServer = getInstance().create(MyApiServer.class);
     private MainContract.View mView;
 
     @Override

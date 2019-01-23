@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AppUpdateUtils.iml" filepath="$PROJECT_DIR$/AppUpdateUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appupdateutils/appupdateutils.iml" filepath="$PROJECT_DIR$/appupdateutils/appupdateutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mvphttphelper/mvphttphelper.iml" filepath="$PROJECT_DIR$/mvphttphelper/mvphttphelper.iml" />
     </modules>
   </component>
 </project>

@@ -1,9 +1,8 @@
 package com.android.freak.appupdateutils;
 
 import com.android.freak.appupdateutils.bean.FrequentlyBean;
-import com.android.freak.appupdateutils.bean.LoginBean;
-import com.android.freak.appupdateutils.net.BasePresenter;
-import com.android.freak.appupdateutils.net.BaseView;
+import com.freak.mvphttphelper.net.BasePresenter;
+import com.freak.mvphttphelper.net.BaseView;
 
 import java.util.List;
 

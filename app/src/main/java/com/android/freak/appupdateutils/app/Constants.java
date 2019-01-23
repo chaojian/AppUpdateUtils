@@ -23,5 +23,5 @@ public class Constants {
     public static final String TIPS_SUCCEED = "tipsSucceed";
     public static final String TIPS_RIGHT = "text_right";
     public static final String TIPS_TYPE = "text_type";
-    public static final String APKINFO = "apk_info";
+
 }

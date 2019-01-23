@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 
 
+import com.freak.mvphttphelper.net.HttpMethods;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -53,6 +54,7 @@ public class App extends Application {
                 .build();
         //log日志打印框架Logger
         Logger.addLogAdapter(new AndroidLogAdapter(mFormatStrategy));
+        HttpMethods.setBaseUrl(Constants.BASE_URL);
     }
 
     //##################################### 以下是activity的收litepal.xml集 ####################################
