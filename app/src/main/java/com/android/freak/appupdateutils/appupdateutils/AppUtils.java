@@ -1,6 +1,5 @@
 package com.android.freak.appupdateutils.appupdateutils;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -45,7 +44,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 /**
  * app更新工具类
  *
- * @author Administrator
+ * @author freak
  * @date 2019/1/2
  */
 
@@ -69,13 +68,25 @@ public class AppUtils {
      */
     private int preProgress;
     private AppCompatActivity mActivity;
-    private UpdateDialogFragment updateDialogFragment;
     private Notification notification = null;
     private static final int PUSH_NOTIFICATION_ID = 100;
     private static final String PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID";
     private static final String PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME";
-    private NumberProgressBar mNumberProgressBar;
+    public static final String UPDATE_DIALOG_SIMPLENESS = "UPDATE_DIALOG_SIMPLENESS";
+    public static final String UPDATE_DIALOG_PARTICULAR = "UPDATE_DIALOG_PARTICULAR";
 
+    /**
+     * 自定义更新弹窗
+     */
+    private BaseDialogFragment updateDialogFragment;
+    /**
+     * 弹窗样式
+     */
+    private String dialogStyle;
+    /**
+     * app名字
+     */
+    private String appName;
     /**
      * 版本号
      */
@@ -143,6 +154,16 @@ public class AppUtils {
     public AppUtils(@Nullable AppCompatActivity activity, String baseUrl) {
         mActivity = activity;
         this.baseUrl = baseUrl;
+    }
+
+    /**
+     * 设置app名字
+     * @param appName
+     * @return
+     */
+    public AppUtils setAppName(String appName) {
+        this.appName = appName;
+        return this;
     }
 
     /**
@@ -255,6 +276,35 @@ public class AppUtils {
         return this;
     }
 
+    /**
+     * 设置自定dialog
+     *
+     * @return
+     */
+    public BaseDialogFragment getUpdateDialogFragment() {
+        return updateDialogFragment;
+    }
+
+    public AppUtils setUpdateDialogFragment(BaseDialogFragment updateDialogFragment) {
+        this.updateDialogFragment = updateDialogFragment;
+        return this;
+    }
+
+    public String getDialogStyle() {
+        return dialogStyle;
+    }
+
+    /**
+     * 选择默认的两种弹窗样式中的一种
+     *
+     * @param dialogStyle
+     * @return
+     */
+    public AppUtils setDialogStyle(String dialogStyle) {
+        this.dialogStyle = dialogStyle;
+        return this;
+    }
+
     public void build() {
         if (versionCode > getVersionCode(mActivity)) {
             ApkInfoBean apkInfoBean = new ApkInfoBean();
@@ -269,25 +319,13 @@ public class AppUtils {
             apkInfoBean.setCancelContent(cancelContent);
             apkInfoBean.setCreateDate(createDate);
             apkInfoBean.setFileName(fileName);
-            showUpdateDialog(apkInfoBean);
+            apkInfoBean.setAppName(appName);
+            showUpdateDialog(getUpdateDialogFragment(), apkInfoBean, getDialogStyle());
         } else {
             Log.d(TAG, "当前是最新版本");
         }
     }
 
-    /**
-     * 获取进度条实例
-     *
-     * @return
-     */
-    public NumberProgressBar getProgressBarInstance() {
-        if (mNumberProgressBar == null) {
-            mNumberProgressBar = new NumberProgressBar(mActivity);
-            return mNumberProgressBar;
-        } else {
-            return mNumberProgressBar;
-        }
-    }
 
     /**
      * [获取应用程序版本名称信息]
@@ -311,13 +349,26 @@ public class AppUtils {
      *
      * @param apkInfoBean 更新信息
      */
-    public void showUpdateDialog(final ApkInfoBean apkInfoBean) {
-
-        if (updateDialogFragment == null) {
-            updateDialogFragment = UpdateDialogFragment.newInstance(apkInfoBean);
+    public void showUpdateDialog(BaseDialogFragment baseDialogFragment, final ApkInfoBean apkInfoBean, String dialogStyle) {
+        if (baseDialogFragment == null) {
+            if (TextUtils.isEmpty(dialogStyle)) {
+                updateDialogFragment = AppUpDateDialogFragment.newInstance(apkInfoBean);
+            } else {
+                switch (dialogStyle) {
+                    case UPDATE_DIALOG_SIMPLENESS:
+                        updateDialogFragment = AppUpDateDialogFragment.newInstance(apkInfoBean);
+                        break;
+                    case UPDATE_DIALOG_PARTICULAR:
+                        updateDialogFragment = UpdateDialogFragment.newInstance(apkInfoBean);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } else {
+            updateDialogFragment = baseDialogFragment;
         }
-
-        updateDialogFragment.setOnConfirmListener(new UpdateDialogFragment.OnTipsListener() {
+        updateDialogFragment.setOnUpdateListener(new OnUpdateListener() {
             @Override
             public void onCancel() {
                 //是否开启强制更新，已开启的话不更新则强制退出软件

@@ -7,11 +7,15 @@ import java.io.Serializable;
 /**
  * 检查更新
  *
- * @author Administrator
+ * @author freak
  * @date 2019/1/2
  */
 
 public class ApkInfoBean implements Serializable {
+    /**
+     * app名字
+     */
+    private String appName;
     /**
      * 版本号
      */
@@ -67,6 +71,13 @@ public class ApkInfoBean implements Serializable {
      */
     private String fileName;
 
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
 
     public Integer getVersionCode() {
         return versionCode;

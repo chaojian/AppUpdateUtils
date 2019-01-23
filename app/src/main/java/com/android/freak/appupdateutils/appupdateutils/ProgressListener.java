@@ -1,7 +1,7 @@
 package com.android.freak.appupdateutils.appupdateutils;
 
 /**
- * @author Administrator
+ * @author freak
  * @date 2019/1/2
  */
 

@@ -11,5 +11,6 @@
     <string name="app_update_time">更新时间：%1$s</string>
     <string name="app_update_add_content">【新增】\n %1$s</string>
     <string name="app_update_fix_content">【修复】\n %1$s</string>
+    <string name="app_update_update_content">更新内容：\n %1$s</string>
     <string name="app_update_cancel_content">【取消】\n %1$s</string>
 </resources>

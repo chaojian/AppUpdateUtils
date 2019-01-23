@@ -21,7 +21,7 @@ import okio.Source;
  * 显然，这样直接返回了一个BufferedSource对象，那么我们的ProgressListener并没有在任何地方得到设置，因此上面的方法是不妥的，
  * 解决方法是利用Okio提供的ForwardingSource来包装我们真正的Source，并在ForwardingSource的read()方法内实现我们的接口回调
  *
- * @author Administrator
+ * @author freak
  * @date 2019/1/2
  */
 

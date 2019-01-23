@@ -21,7 +21,7 @@ import static com.android.freak.appupdateutils.appupdateutils.NumberProgressBar.
 /**
  * 数字进度条
  *
- * @author Administrator
+ * @author freak
  * @date 2019/1/2
  */
 
@@ -177,7 +177,7 @@ public class NumberProgressBar extends View {
         //进度文字偏移量
         mOffset = attributes.getDimension(R.styleable.NumberProgressBar_progress_text_offset, default_progress_text_offset);
         //是否显示文字进度
-        int textVisible = attributes.getInt(R.styleable.NumberProgressBar_progress_text_visibility, isTextVisible() ? PROGRESS_TEXT_VISIBLE : PROGRESS_TEXT_INVISIBLE);
+        int textVisible = attributes.getInt(R.styleable.NumberProgressBar_progress_text_visibility, PROGRESS_TEXT_VISIBLE);
         if (textVisible != PROGRESS_TEXT_VISIBLE) {
             mIfDrawText = false;
         }
@@ -240,15 +240,15 @@ public class NumberProgressBar extends View {
         } else {
             calculateDrawRectFWithoutProgressText();
         }
-
+        //已完成进度绘制
         if (mDrawReachedBar) {
             canvas.drawRect(mReachedRectF, mReachedBarPaint);
         }
-
+        //未完成进度绘制
         if (mDrawUnreachedBar) {
             canvas.drawRect(mUnreachedRectF, mUnreachedBarPaint);
         }
-
+        //文字绘制
         if (mIfDrawText) {
             canvas.drawText(mCurrentDrawText, mDrawTextStart, mDrawTextEnd, mTextPaint);
         }
@@ -270,7 +270,7 @@ public class NumberProgressBar extends View {
     }
 
     /**
-     * 计算进度位置
+     * 绘制不显示进度数字进度条
      */
     private void calculateDrawRectFWithoutProgressText() {
         mReachedRectF.left = getPaddingLeft();
@@ -285,7 +285,7 @@ public class NumberProgressBar extends View {
     }
 
     /**
-     * 计算带进度文字位置
+     * 绘制带进度文字进度条
      */
     private void calculateDrawRectF() {
 
@@ -554,16 +554,4 @@ public class NumberProgressBar extends View {
         mListener = listener;
     }
 
-    public boolean isTextVisible() {
-        return mTextVisible;
-    }
-
-    /**
-     * 设置是否显示进度文字
-     * @param textVisible
-     */
-    public void setTextVisible(boolean textVisible) {
-        mTextVisible = textVisible;
-        invalidate();
-    }
 }

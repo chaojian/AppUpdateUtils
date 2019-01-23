@@ -3,7 +3,6 @@ package com.android.freak.appupdateutils.appupdateutils;
 
 import android.support.annotation.Nullable;
 
-import com.android.freak.appupdateutils.app.Constants;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -18,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * 下载助手 包含进度监听
  *
- * @author Administrator
+ * @author freak
  * @date 2019/1/2
  */
 
