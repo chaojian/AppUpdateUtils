@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         AppUtils appUtils = new AppUtils(this, null, BuildConfig.APPLICATION_ID + ".fileProvider");
 //        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", null);
         appUtils.setApkURL("https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk")
-                .setForce(false)
                 .setFileName("蜂鸟普惠")
                 .setVersionCode(4)
                 .setNotificationTitle("ajsfjka")

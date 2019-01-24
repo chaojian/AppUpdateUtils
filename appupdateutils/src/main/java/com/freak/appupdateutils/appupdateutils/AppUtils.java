@@ -421,7 +421,7 @@ public class AppUtils {
             @Override
             public void onCancel() {
                 //是否开启强制更新，已开启的话不更新则强制退出软件
-                if (apkInfoBean.getForce()) {
+                if (apkInfoBean.getForce() == null ? false : apkInfoBean.getForce()) {
                     //退出
                     updateDialogFragment.dismiss();
 
