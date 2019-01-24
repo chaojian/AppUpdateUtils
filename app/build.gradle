@@ -28,5 +28,5 @@ dependencies {
     //    implementation 'com.google.guava:guava:26.0-jre'
     implementation 'com.orhanobut:logger:2.2.0'
     implementation project(':appupdateutils')
-//    api project(':mvphttphelper')
+    api project(':mvphttphelper')
 }

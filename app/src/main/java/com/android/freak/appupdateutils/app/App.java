@@ -3,7 +3,6 @@ package com.android.freak.appupdateutils.app;
 import android.app.Activity;
 import android.app.Application;
 
-
 import com.freak.mvphttphelper.net.HttpMethods;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppUpdateUtils</string>
+    <string name="app_name">软件更新</string>
     <!-- 更新apk -->
     <string name="title">标题</string>
     <string name="apk_update_introduction">更新说明：</string>

@@ -2,6 +2,7 @@ package com.freak.appupdateutils.appupdateutils;
 
 
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class DownloadHelper {
     private static final int DEFAULT_TIMEOUT = 10;
 
     private Retrofit retrofit;
+    private final static String BASE_URL = "https://www.baidu.com/";
 
     private static OkHttpClient.Builder builder;
 
@@ -50,6 +52,7 @@ public class DownloadHelper {
 
     /**
      * 获取单例
+     *
      * @return
      */
     public static DownloadHelper getInstance() {
@@ -60,13 +63,14 @@ public class DownloadHelper {
 
     /**
      * 创建ApiService
+     *
      * @param serviceClass
      * @param baseUrl
      * @param progressListener
      * @param <S>
      * @return
      */
-    public <S>S createApiService(Class<S> serviceClass, @Nullable String baseUrl, final ProgressListener progressListener){
+    public <S> S createApiService(Class<S> serviceClass, @Nullable String baseUrl, final ProgressListener progressListener) {
 
         builder.addNetworkInterceptor(new Interceptor() {
             @Override
@@ -74,7 +78,7 @@ public class DownloadHelper {
                 //本身的response
                 Response proceed = chain.proceed(chain.request());
                 //创建自定义的ProgressResponseBody
-                ProgressResponseBody progressResponseBody = new ProgressResponseBody(proceed.body(),progressListener);
+                ProgressResponseBody progressResponseBody = new ProgressResponseBody(proceed.body(), progressListener);
 
                 //替换我们自己的进度监听的progressResponseBody
                 return proceed.newBuilder()
@@ -87,7 +91,7 @@ public class DownloadHelper {
                 .client(builder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(baseUrl).build();
+                .baseUrl(TextUtils.isEmpty(baseUrl) ?BASE_URL:baseUrl).build();
 
         return retrofit.create(serviceClass);
     }

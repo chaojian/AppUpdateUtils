@@ -1,7 +1,6 @@
 package com.freak.appupdateutils.appupdateutils;
 
 import android.app.Dialog;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.view.View;
@@ -32,12 +31,8 @@ public class UpdateDialogFragment extends BaseDialogFragment implements OnProgre
     private TextView mTvApkIntroductionFix;
     private TextView mTvApkIntroductionCancel;
 
-    public static UpdateDialogFragment newInstance(ApkInfoBean apkInfoBean) {
-        Bundle args = new Bundle();
-        args.putSerializable(AppUtils.APK_INFO, apkInfoBean);
-        UpdateDialogFragment fragment = new UpdateDialogFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static UpdateDialogFragment newInstance() {
+        return new UpdateDialogFragment();
     }
 
     @Override
@@ -52,7 +47,7 @@ public class UpdateDialogFragment extends BaseDialogFragment implements OnProgre
 
     @Override
     protected void initData() {
-        mApkInfoBean = (ApkInfoBean) getArguments().getSerializable(AppUtils.APK_INFO);
+        mApkInfoBean = AppUtils.getApkInfoBean();
 
         //标题
         mTvUpdateTitle.setText(TextUtils.isEmpty(mApkInfoBean.getAppName()) ? "发现新版本" : mApkInfoBean.getAppName());

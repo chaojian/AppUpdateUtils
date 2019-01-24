@@ -1,26 +1,27 @@
-package com.freak.appupdateutils.appupdateutils;
+package com.android.freak.appupdateutils;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.freak.appupdateutils.R;
-
+import com.freak.appupdateutils.appupdateutils.ApkInfoBean;
+import com.freak.appupdateutils.appupdateutils.AppUtils;
+import com.freak.appupdateutils.appupdateutils.BaseDialogFragment;
+import com.freak.appupdateutils.appupdateutils.OnUpdateListener;
 
 /**
- * app检测更新dialog
- *
- * @author freak
- * @date 2019/1/23
+ * Created by Administrator on 2019/1/24.
  */
 
-public class AppUpDateDialogFragment extends BaseDialogFragment implements OnProgressBarListener {
+public class DialogFragment extends BaseDialogFragment   {
     private TextView mTextViewTitle;
     private TextView mTextViewUpdateContext;
     private TextView mTextViewCommit;
     private TextView mTextViewCancel;
-    private NumberProgressBar mProgressBar;
+    private ProgressBar mProgressBar;
     private ApkInfoBean mApkInfoBean;
     private OnUpdateListener mOnUpdateListener;
 
@@ -34,22 +35,22 @@ public class AppUpDateDialogFragment extends BaseDialogFragment implements OnPro
 
     @Override
     protected int getLayoutId() {
-        return R.layout.dialog_fragment_app_update;
+        return R.layout.dialog_fragment_update;
     }
 
     @Override
     protected int getDialogStyle() {
-        return R.style.dialog;
+        return com.freak.appupdateutils.R.style.dialog;
     }
 
     @Override
     protected void initView(Dialog view) {
 
-        mTextViewTitle = view.findViewById(R.id.text_view_title);
-        mTextViewUpdateContext = view.findViewById(R.id.text_view_update_context);
-        mTextViewCommit = view.findViewById(R.id.text_view_commit);
-        mTextViewCancel = view.findViewById(R.id.text_view_cancel);
-        mProgressBar = view.findViewById(R.id.progress_bar);
+        mTextViewTitle = view.findViewById(com.freak.appupdateutils.R.id.text_view_title);
+        mTextViewUpdateContext = view.findViewById(com.freak.appupdateutils.R.id.text_view_update_context);
+        mTextViewCommit = view.findViewById(com.freak.appupdateutils.R.id.text_view_commit);
+        mTextViewCancel = view.findViewById(com.freak.appupdateutils.R.id.text_view_cancel);
+        mProgressBar = view.findViewById(com.freak.appupdateutils.R.id.progress_bar);
         mTextViewCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,11 +67,15 @@ public class AppUpDateDialogFragment extends BaseDialogFragment implements OnPro
                 }
             }
         });
-        mProgressBar.setOnProgressBarListener(this);
+
     }
 
-    public static AppUpDateDialogFragment newInstance() {
-        return new AppUpDateDialogFragment();
+    public static DialogFragment newInstance(ApkInfoBean apkInfoBean) {
+        Bundle args = new Bundle();
+        args.putSerializable(AppUtils.APK_INFO, apkInfoBean);
+        DialogFragment fragment = new DialogFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -85,10 +90,6 @@ public class AppUpDateDialogFragment extends BaseDialogFragment implements OnPro
         mOnUpdateListener = onUpdateListener;
     }
 
-    @Override
-    public void onProgressChange(int current, int max) {
-
-    }
 
     /**
      * 设置下载进度

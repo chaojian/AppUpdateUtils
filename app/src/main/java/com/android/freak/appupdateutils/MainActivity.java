@@ -38,14 +38,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     public void login(View view) {
-        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/");
+//        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", BuildConfig.APPLICATION_ID + ".fileProvider");
+        AppUtils appUtils = new AppUtils(this, null, BuildConfig.APPLICATION_ID + ".fileProvider");
+//        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", null);
         appUtils.setApkURL("https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk")
                 .setForce(false)
                 .setFileName("蜂鸟普惠")
                 .setVersionCode(4)
+                .setNotificationTitle("ajsfjka")
                 .setVersionName("6.0.0")
                 .setAddContent("1、现场pos")
-                .setDialogStyle(AppUtils.UPDATE_DIALOG_PARTICULAR)
+                .setDialogStyle(AppUtils.UPDATE_DIALOG_SIMPLENESS)
                 .build();
     }
 }

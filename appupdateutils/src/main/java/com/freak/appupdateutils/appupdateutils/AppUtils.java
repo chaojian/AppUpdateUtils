@@ -22,7 +22,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.freak.appupdateutils.BuildConfig;
 import com.freak.appupdateutils.R;
 
 import java.io.File;
@@ -48,7 +47,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  */
 
 public class AppUtils {
-    private final String TAG = "AppUtils";
+    private static final String TAG = "AppUtils";
     /**
      * 保存文件路径
      */
@@ -146,15 +145,48 @@ public class AppUtils {
      */
     private String baseUrl;
 
+    public String fileProvider;
+
+    private String notificationTitle;
+
+    private static ApkInfoBean mApkInfoBean;
+
+    public static ApkInfoBean getApkInfoBean() {
+        return mApkInfoBean;
+    }
+
+    public void setApkInfoBean(ApkInfoBean apkInfoBean) {
+        mApkInfoBean = apkInfoBean;
+    }
+
     /**
      * 初始化
      *
-     * @param activity
+     * @param activity 上下文
+     * @param baseUrl  服务器域名
+     * @param fileProvider 6.0以上手机文件下载路径配置
      */
-    public AppUtils(@Nullable AppCompatActivity activity, @Nullable String baseUrl) {
+    public AppUtils(@Nullable AppCompatActivity activity, @Nullable String baseUrl, @Nullable String fileProvider) {
         mActivity = activity;
         this.baseUrl = baseUrl;
+        this.fileProvider = fileProvider;
     }
+
+
+    public String getNotificationTitle() {
+        return notificationTitle;
+    }
+
+    /**
+     * 设置Notification标题
+     *
+     * @return
+     */
+    public AppUtils setNotificationTitle(String notificationTitle) {
+        this.notificationTitle = notificationTitle;
+        return this;
+    }
+
 
     /**
      * 设置app名字
@@ -277,7 +309,7 @@ public class AppUtils {
         return this;
     }
 
-    public  String getBaseUrl() {
+    public String getBaseUrl() {
         return baseUrl;
     }
 
@@ -329,7 +361,16 @@ public class AppUtils {
             apkInfoBean.setCreateDate(createDate);
             apkInfoBean.setFileName(fileName);
             apkInfoBean.setAppName(appName);
-            showUpdateDialog(getUpdateDialogFragment(), apkInfoBean, getDialogStyle());
+            setApkInfoBean(apkInfoBean);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (TextUtils.isEmpty(fileProvider)) {
+                    Log.e(TAG, "6.0版本以上手机，请配置fileProvider");
+                } else {
+                    showUpdateDialog(getUpdateDialogFragment(), apkInfoBean, getDialogStyle());
+                }
+            } else {
+                showUpdateDialog(getUpdateDialogFragment(), apkInfoBean, getDialogStyle());
+            }
         } else {
             Log.d(TAG, "当前是最新版本");
         }
@@ -361,14 +402,14 @@ public class AppUtils {
     public void showUpdateDialog(BaseDialogFragment baseDialogFragment, final ApkInfoBean apkInfoBean, String dialogStyle) {
         if (baseDialogFragment == null) {
             if (TextUtils.isEmpty(dialogStyle)) {
-                updateDialogFragment = AppUpDateDialogFragment.newInstance(apkInfoBean);
+                updateDialogFragment = AppUpDateDialogFragment.newInstance();
             } else {
                 switch (dialogStyle) {
                     case UPDATE_DIALOG_SIMPLENESS:
-                        updateDialogFragment = AppUpDateDialogFragment.newInstance(apkInfoBean);
+                        updateDialogFragment = AppUpDateDialogFragment.newInstance();
                         break;
                     case UPDATE_DIALOG_PARTICULAR:
-                        updateDialogFragment = UpdateDialogFragment.newInstance(apkInfoBean);
+                        updateDialogFragment = UpdateDialogFragment.newInstance();
                         break;
                     default:
                         break;
@@ -440,7 +481,7 @@ public class AppUtils {
                             @Override
                             public void call(Boolean aBoolean) {
                                 if (aBoolean) {
-                                    AppUtils.installApk(mActivity, savePath);
+                                    AppUtils.installApk(mActivity, savePath, fileProvider);
                                 } else {
                                     Log.e(TAG, "apk保存失败");
                                     cancelNotification();
@@ -501,7 +542,11 @@ public class AppUtils {
                              *  BuildConfig.APPLICATION_ID + ".fileProvider"
                              *  注意：BuildConfig的导包是这个项目的，不要导包错误
                              */
-                            Uri apkUri = FileProvider.getUriForFile(mActivity, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+                            if (TextUtils.isEmpty(fileProvider)) {
+                                Log.e(TAG, "文件保存失败，在Build.VERSION.SDK_INT》=24时请配置fileProvider");
+                                return;
+                            }
+                            Uri apkUri = FileProvider.getUriForFile(mActivity, fileProvider, file);
                             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             it.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             it.setDataAndType(apkUri, "application/vnd.android.package-archive");
@@ -544,12 +589,12 @@ public class AppUtils {
             notificationManager.createNotificationChannel(mChannel);
             mBuilder = new Notification.Builder(mActivity, PUSH_CHANNEL_ID);
             notification = mBuilder
-                    .setContentTitle("软件更新")
+                    .setContentTitle(TextUtils.isEmpty(getNotificationTitle()) ? "软件更新" : getNotificationTitle())
                     .setContentText("0%")
                     .setSmallIcon(R.mipmap.ic_launcher).build();
         } else {
             builder = new NotificationCompat.Builder(mActivity, PUSH_CHANNEL_ID)
-                    .setContentTitle("软件更新")
+                    .setContentTitle(TextUtils.isEmpty(getNotificationTitle()) ? "软件更新" : getNotificationTitle())
                     .setContentText("0%")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setOngoing(true);
@@ -568,12 +613,12 @@ public class AppUtils {
         if (preProgress < currProgress) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notification = mBuilder
-                        .setContentTitle("软件更新")
+                        .setContentTitle(TextUtils.isEmpty(getNotificationTitle()) ? "软件更新" : getNotificationTitle())
                         .setContentText(progress + "%")
                         .setProgress(100, (int) progress, false)
                         .build();
             } else {
-                builder.setContentTitle("软件更新");
+                builder.setContentTitle(TextUtils.isEmpty(getNotificationTitle()) ? "软件更新" : getNotificationTitle());
                 builder.setContentText(progress + "%");
                 builder.setProgress(100, (int) progress, false);
                 notification = builder.build();
@@ -597,7 +642,7 @@ public class AppUtils {
      * @param filePath
      * @return
      */
-    public static boolean installApk(Context context, String filePath) {
+    public static boolean installApk(Context context, String filePath, String fileProvider) {
         setPermission(filePath);
         Log.e("INSTALL", "downloadDir:" + filePath);
         File file = new File(filePath);
@@ -611,7 +656,11 @@ public class AppUtils {
 
         //判读版本是否在7.0以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri apkUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+            if (TextUtils.isEmpty(fileProvider)) {
+                Log.e(TAG, "安装失败，在Build.VERSION.SDK_INT》=24时请配置fileProvider");
+                return false;
+            }
+            Uri apkUri = FileProvider.getUriForFile(context, fileProvider, file);
 
             Log.e("install", "apkUri7.0:" + apkUri.toString());
 
