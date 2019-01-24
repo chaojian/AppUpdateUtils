@@ -162,8 +162,8 @@ public class AppUtils {
     /**
      * 初始化
      *
-     * @param activity 上下文
-     * @param baseUrl  服务器域名
+     * @param activity     上下文
+     * @param baseUrl      服务器域名
      * @param fileProvider 6.0以上手机文件下载路径配置
      */
     public AppUtils(@Nullable AppCompatActivity activity, @Nullable String baseUrl, @Nullable String fileProvider) {
@@ -375,7 +375,6 @@ public class AppUtils {
             Log.d(TAG, "当前是最新版本");
         }
     }
-
 
     /**
      * [获取应用程序版本名称信息]

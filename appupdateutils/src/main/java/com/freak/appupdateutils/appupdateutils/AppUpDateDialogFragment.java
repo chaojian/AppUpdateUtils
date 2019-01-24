@@ -28,7 +28,6 @@ public class AppUpDateDialogFragment extends BaseDialogFragment implements OnPro
     @Override
     protected void initData() {
         mApkInfoBean = AppUtils.getApkInfoBean();
-//        mTextViewUpdateContext.setText(TextUtils.isEmpty(mApkInfoBean.getAddContent()) ? "" : getResources().getString(R.string.app_update_update_content, mApkInfoBean.getAddContent()));
         mTextViewUpdateContext.setText(TextUtils.isEmpty(mApkInfoBean.getAddContent()) ? "" : "更新内容\n" + mApkInfoBean.getAddContent());
     }
 

@@ -48,7 +48,6 @@ public class UpdateDialogFragment extends BaseDialogFragment implements OnProgre
     @Override
     protected void initData() {
         mApkInfoBean = AppUtils.getApkInfoBean();
-
         //标题
         mTvUpdateTitle.setText(TextUtils.isEmpty(mApkInfoBean.getAppName()) ? "发现新版本" : mApkInfoBean.getAppName());
         //简介

@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     public void login(View view) {
+
 //        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", BuildConfig.APPLICATION_ID + ".fileProvider");
         AppUtils appUtils = new AppUtils(this, null, BuildConfig.APPLICATION_ID + ".fileProvider");
 //        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", null);
@@ -47,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setVersionCode(4)
                 .setNotificationTitle("ajsfjka")
                 .setVersionName("6.0.0")
-                .setAddContent("1、现场pos")
-                .setDialogStyle(AppUtils.UPDATE_DIALOG_SIMPLENESS)
+                .setAddContent("1、现场pos\n1、现场pos\n1、现场pos\n1、现场pos\n1、现场pos\n1、现场pos\n")
+                .setDialogStyle(AppUtils.UPDATE_DIALOG_PARTICULAR)
                 .build();
     }
 }
