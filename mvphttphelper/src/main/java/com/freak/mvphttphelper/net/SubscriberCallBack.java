@@ -8,6 +8,10 @@ import java.util.concurrent.TimeoutException;
 
 import rx.Subscriber;
 
+/**
+ * @author freak
+ * @date 2019/01/25
+ */
 public class SubscriberCallBack extends Subscriber {
     private ApiCallback apiCallback;
 
@@ -22,6 +26,7 @@ public class SubscriberCallBack extends Subscriber {
 
     /**
      * 错误时调用
+     *
      * @param e
      */
     @Override
@@ -34,22 +39,23 @@ public class SubscriberCallBack extends Subscriber {
             } else if (e instanceof ConnectException) {
                 msg = "网络中断，请检查您的网络状态";
                 apiCallback.onFailure(msg);
-            }else if(e instanceof TimeoutException){
+            } else if (e instanceof TimeoutException) {
                 msg = "连接超时，请检查您的网络状态";
                 apiCallback.onFailure(msg);
-            }else {
-                Log.e("json","发送错误",e);
+            } else {
+                Log.e("json", "发送错误", e);
                 e.printStackTrace();
                 apiCallback.onFailure(e.getMessage());
             }
-        }catch (Exception e1){
+        } catch (Exception e1) {
             apiCallback.onFailure(e1.getMessage());
             e1.printStackTrace();
         }
     }
 
     /**
-     * 成功是调用
+     * 成功时调用
+     *
      * @param o
      */
     @Override

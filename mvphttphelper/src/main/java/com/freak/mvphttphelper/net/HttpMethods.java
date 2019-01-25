@@ -10,7 +10,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * okHttp请求类封装
+ *
  * @author freak
+ * @date 2019/01/25
  */
 public class HttpMethods {
     //这是连接网络的时间
@@ -23,6 +25,7 @@ public class HttpMethods {
     public static void setBaseUrl(String url) {
         BaseUrl = url;
     }
+
     public HttpMethods() {
         /**
          * 创建okHttpClient
@@ -52,19 +55,22 @@ public class HttpMethods {
     private static class SingletonHolder {
         private static final Retrofit INSTANCE = new HttpMethods().getServer();
     }
+
     public static HttpMethods getInstance() {
-        if(mHttpMethods == null) {
+        if (mHttpMethods == null) {
             Class var0 = HttpMethods.class;
-            synchronized(HttpMethods.class) {
+            synchronized (HttpMethods.class) {
                 mHttpMethods = new HttpMethods();
             }
         }
 
         return mHttpMethods;
     }
+
     public <T> T create(Class<T> service) {
         return this.retrofit.create(service);
     }
+
     /**
      * 获取单例
      *
@@ -73,7 +79,6 @@ public class HttpMethods {
 //    public static Retrofit getInstance() {
 //        return SingletonHolder.INSTANCE;
 //    }
-
     public Retrofit getServer() {
         return retrofit;
     }

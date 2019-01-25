@@ -7,7 +7,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
+/**
+ * @author freak
+ * @date 2019/01/25
+ */
+public class RxPresenter<T extends RxBaseView> implements BasePresenter<T> {
     protected T mView;
     protected CompositeSubscription mCompositeSubscription;
 
@@ -32,6 +36,7 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
 
     /**
      * RxJava绑定
+     *
      * @param observable
      * @param subscriber
      * @param <T>
@@ -46,27 +51,22 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
                 .subscribe(subscriber));
     }
 
+    /**
+     * 附加view
+     *
+     * @param view
+     */
     @Override
-    public void start() {
-
+    public void attachView(T view) {
+        this.mView = view;
     }
 
-//    /**
-//     * 附加view
-//     *
-//     * @param view
-//     */
-//    @Override
-//    public void attachView(T view) {
-//        this.mView = view;
-//    }
-//
-//    /**
-//     * 分离view
-//     */
-//    @Override
-//    public void detachView() {
-//        this.mView = null;
-//        unSubscribe();
-//    }
+    /**
+     * 分离view
+     */
+    @Override
+    public void detachView() {
+        this.mView = null;
+        unSubscribe();
+    }
 }

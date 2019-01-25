@@ -1,45 +1,53 @@
 package com.android.freak.appupdateutils;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
-import com.android.freak.appupdateutils.bean.FrequentlyBean;
+import com.android.freak.appupdateutils.app.BaseActivity;
+import com.android.freak.appupdateutils.bean.LoginBean;
 import com.freak.appupdateutils.appupdateutils.AppUtils;
 import com.orhanobut.logger.Logger;
 
-import java.util.List;
 
-
-public class MainActivity extends AppCompatActivity implements MainContract.View {
-    private MainContract.Presenter mPresenter;
+/**
+ * @author Administrator
+ */
+public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View {
+    private final static String TAG="MainActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        mPresenter = new MainPresenter(this);
+    protected int getLayout() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initEventAndData() {
 
     }
 
     @Override
-    public void onSuccess(List<FrequentlyBean> loginBean) {
+    protected MainPresenter createPresenter() {
+        return new MainPresenter();
+    }
+
+
+    @Override
+    public void onSuccess(LoginBean loginBean) {
         Logger.d(loginBean);
     }
 
     @Override
     public void onError(String msg) {
-
+        Log.e(TAG, msg);
     }
 
-    @Override
-    public void setPresenter(MainContract.Presenter presenter) {
-//        mPresenter=checkNotNull(presenter);
-    }
 
     public void login(View view) {
+        mPresenter.doLogin();
+    }
 
-//        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", BuildConfig.APPLICATION_ID + ".fileProvider");
+    public void update(View view) {
+        //        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", BuildConfig.APPLICATION_ID + ".fileProvider");
         AppUtils appUtils = new AppUtils(this, null, BuildConfig.APPLICATION_ID + ".fileProvider");
 //        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", null);
         appUtils.setApkURL("https://www.pgyertest.hangmuxitong.com/uploads/20190102/android/5c2cb3f369cc2.apk")
@@ -50,5 +58,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setAddContent("1、现场pos\n1、现场pos\n1、现场pos\n1、现场pos\n1、现场pos\n1、现场pos\n")
                 .setDialogStyle(AppUtils.UPDATE_DIALOG_PARTICULAR)
                 .build();
+    }
+
+
+    @Override
+    public void text() {
+
     }
 }

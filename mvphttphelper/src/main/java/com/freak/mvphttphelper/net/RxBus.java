@@ -5,6 +5,10 @@ import rx.subjects.PublishSubject;
 import rx.subjects.SerializedSubject;
 import rx.subjects.Subject;
 
+/**
+ * @author freak
+ * @date 2019/01/25
+ */
 public class RxBus {
     private static volatile RxBus defaultInstance;
     private final Subject<Object, Object> bus;
@@ -28,13 +32,15 @@ public class RxBus {
 
     /**
      * 发送一个新的事件
+     *
      * @param o
      */
     public void post(Object o) {
         bus.onNext(o);
     }
+
     // 根据传递的 eventType 类型返回特定类型(eventType)的 被观察者
-    public <T> Observable<T> tObservable(Class<T> eventType){
+    public <T> Observable<T> tObservable(Class<T> eventType) {
         return bus.ofType(eventType);
         //        这里感谢小鄧子的提醒: ofType = filter + cast
 //        return bus.filter(new Func1<Object, Boolean>() {

@@ -1,22 +1,20 @@
 package com.android.freak.appupdateutils;
 
-import com.android.freak.appupdateutils.bean.FrequentlyBean;
+import com.android.freak.appupdateutils.app.BaseView;
+import com.android.freak.appupdateutils.bean.LoginBean;
 import com.freak.mvphttphelper.net.BasePresenter;
-import com.freak.mvphttphelper.net.BaseView;
-
-import java.util.List;
 
 /**
  * Created by Administrator on 2018/12/25.
  */
 
 public interface MainContract {
-    interface View extends BaseView<Presenter> {
-        void onSuccess(List<FrequentlyBean> loginBean);
+    interface View extends BaseView {
+        void onSuccess(LoginBean loginBean);
         void onError(String msg);
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter extends BasePresenter<View> {
         void doLogin();
     }
 }

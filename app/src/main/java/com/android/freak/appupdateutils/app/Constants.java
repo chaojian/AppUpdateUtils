@@ -10,7 +10,8 @@ public class Constants {
      * 服务器地址
      */
 //    public static final String BASE_URL = "http://192.168.1.89:8014/";
-    public static final String BASE_URL = "http://wanandroid.com/";
+//    public static final String BASE_URL = "http://wanandroid.com/";
+    public static final String BASE_URL = "http://192.168.1.89:8014";
     public static final String org_number = "Y1000000001";
     public static final String user_mobile = "18000000001";
     public static final String user_password = "123456";
