@@ -7,5 +7,5 @@ import com.freak.mvphttphelper.net.RxBaseView;
  */
 
 public interface BaseView extends RxBaseView{
-    void text();
+    void showResult(String result);
 }

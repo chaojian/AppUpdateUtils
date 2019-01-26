@@ -2,6 +2,8 @@ package com.android.freak.appupdateutils;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.freak.appupdateutils.app.BaseActivity;
 import com.android.freak.appupdateutils.bean.LoginBean;
@@ -13,7 +15,9 @@ import com.orhanobut.logger.Logger;
  * @author Administrator
  */
 public class MainActivity extends BaseActivity<MainPresenter> implements MainContract.View {
-    private final static String TAG="MainActivity";
+    private final static String TAG = "MainActivity";
+    private EditText username, pwd;
+    private TextView tvResult;
 
     @Override
     protected int getLayout() {
@@ -22,7 +26,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     protected void initEventAndData() {
-
+        username = findViewById(R.id.username);
+        pwd = findViewById(R.id.pwd);
+        tvResult = findViewById(R.id.result);
     }
 
     @Override
@@ -33,6 +39,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
 
     @Override
     public void onSuccess(LoginBean loginBean) {
+        Logger.e("onSuccess");
         Logger.d(loginBean);
     }
 
@@ -41,10 +48,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         Log.e(TAG, msg);
     }
 
-
-    public void login(View view) {
-        mPresenter.doLogin();
-    }
 
     public void update(View view) {
         //        AppUtils appUtils = new AppUtils(this, "https://www.pgyertest.hangmuxitong.com/", BuildConfig.APPLICATION_ID + ".fileProvider");
@@ -61,8 +64,12 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     }
 
 
-    @Override
-    public void text() {
+    public void login(View view) {
+        mPresenter.doLogin(username.getText().toString().trim(), pwd.getText().toString().trim());
+    }
 
+    @Override
+    public void showResult(String result) {
+        tvResult.setText(result);
     }
 }

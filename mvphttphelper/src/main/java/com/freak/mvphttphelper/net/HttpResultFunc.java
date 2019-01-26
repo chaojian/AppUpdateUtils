@@ -16,7 +16,8 @@ public class HttpResultFunc<T> implements Func1<AbstractHttpResult<T>, T> {
     @Override
     public T call(AbstractHttpResult<T> tHttpResult) {
         //int类型结果码
-        if (TextUtils.isEmpty(tHttpResult.getStringResultCode())) {
+        if (TextUtils.isEmpty(tHttpResult.getStringSuccessCode())) {
+            Log.e("HttpResultFunc", "int结果码" + tHttpResult.getIntResultCode() + "\n设置的int结果码" + tHttpResult.getIntSuccessCode());
             if (tHttpResult.getIntResultCode() != tHttpResult.getIntSuccessCode()) {
                 int[] otherCode = tHttpResult.getIntOtherCode();
                 for (int code : otherCode) {
@@ -33,7 +34,7 @@ public class HttpResultFunc<T> implements Func1<AbstractHttpResult<T>, T> {
             if (!tHttpResult.getStringSuccessCode().equals(tHttpResult.getStringResultCode())) {
                 String[] otherCode = tHttpResult.getStringOtherCode();
                 for (String code : otherCode) {
-                    if (tHttpResult.getStringSuccessCode().equals(code)) {
+                    if (tHttpResult.getStringResultCode().equals(code)) {
                         throw new ApiException(tHttpResult.getStringResultCode());
                     }
                 }

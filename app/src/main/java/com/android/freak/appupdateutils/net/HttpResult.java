@@ -8,81 +8,81 @@ import com.freak.mvphttphelper.net.AbstractHttpResult;
  */
 
 public class HttpResult<T> extends AbstractHttpResult<T> {
-    private String respCode;
+    private int code;
 
-    private String respDesc;
+    private String msg;
 
-    private T respData;
+    private T data;
 
-    public String getRespCode() {
-        return respCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setRespCode(String respCode) {
-        this.respCode = respCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getRespDesc() {
-        return respDesc;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setRespDesc(String respDesc) {
-        this.respDesc = respDesc;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public T getRespData() {
-        return respData;
+    public T getData() {
+        return data;
     }
 
-    public void setRespData(T respData) {
-        this.respData = respData;
+    public void setData(T data) {
+        this.data = data;
     }
 
     @Override
     protected T getResultData() {
-        return getRespData();
+        return getData();
     }
 
     @Override
     protected int getIntSuccessCode() {
-        return 0;
+        return 200;
     }
 
     @Override
     protected String getStringSuccessCode() {
-        return "0000";
+        return null;
     }
 
     @Override
     protected String getResultErrorMsg() {
-        return getRespDesc();
+        return getMsg();
     }
 
     @Override
     protected int getIntResultCode() {
-        return 0;
+        return getCode();
     }
 
     @Override
     protected String getStringResultCode() {
-        return getRespCode();
+        return null;
     }
 
     @Override
     protected int[] getIntOtherCode() {
-        return new int[]{0, 200};
+        return new int[]{0, 46};
     }
 
     @Override
     protected String[] getStringOtherCode() {
-        return new String[]{"0027", "0051"};
+        return new String[0];
     }
 
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        if (null != respData) {
-            sb.append(respData.toString());
+        if (null != data) {
+            sb.append(data.toString());
         }
         return sb.toString();
     }

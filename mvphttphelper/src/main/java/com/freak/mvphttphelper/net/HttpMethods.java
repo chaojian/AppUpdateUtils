@@ -4,6 +4,7 @@ package com.freak.mvphttphelper.net;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -18,12 +19,17 @@ public class HttpMethods {
     //这是连接网络的时间
     private static final int DEFAULT_TIMEOUT = 10;
     private static String BaseUrl;
+    public static Converter.Factory mFactory;
 
     private Retrofit retrofit;
     private static HttpMethods mHttpMethods;
 
     public static void setBaseUrl(String url) {
         BaseUrl = url;
+    }
+
+    public static void setFactory(Converter.Factory factory) {
+        mFactory = factory;
     }
 
     public HttpMethods() {
@@ -45,7 +51,7 @@ public class HttpMethods {
          * baseUrl 基础地址
          */
         retrofit = new Retrofit.Builder().client(builder.build())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(mFactory == null?GsonConverterFactory.create():mFactory)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BaseUrl)
                 .build();

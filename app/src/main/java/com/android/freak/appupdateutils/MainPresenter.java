@@ -1,7 +1,6 @@
 package com.android.freak.appupdateutils;
 
 import com.android.freak.appupdateutils.app.ApiServer;
-import com.android.freak.appupdateutils.app.Constants;
 import com.android.freak.appupdateutils.bean.LoginBean;
 import com.freak.mvphttphelper.net.ApiCallback;
 import com.freak.mvphttphelper.net.HttpMethods;
@@ -19,22 +18,25 @@ public class MainPresenter extends RxPresenter<MainContract.View> implements Mai
 
 
     @Override
-    public void doLogin() {
-        Observable observable = apiServer.login(Constants.org_number, Constants.user_mobile, Constants.user_password).map(new HttpResultFunc<LoginBean>());
+    public void doLogin(String userName,String pwd) {
+        Observable observable = apiServer.login(userName,pwd).map(new HttpResultFunc<LoginBean>());
         addSubscription(observable, new SubscriberCallBack(new ApiCallback<LoginBean>() {
             @Override
             public void onSuccess(LoginBean model) {
                 Logger.d(model);
                 mView.onSuccess(model);
+                mView.showResult(model.toString());
             }
 
             @Override
             public void onFailure(String msg) {
                 mView.onError(msg);
+                mView.showResult("错误信息或code--》"+msg);
             }
         }));
 
     }
+
 
 
 }

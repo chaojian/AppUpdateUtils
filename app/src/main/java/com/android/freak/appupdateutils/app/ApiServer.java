@@ -21,10 +21,10 @@ public interface ApiServer {
      *
      * @return
      */
-    @POST("/app/user/login")
-    Observable<HttpResult<LoginBean>> login(@Query("org_number") String org_number,
-                                            @Query("user_mobile") String user_mobile,
-                                            @Query("user_password") String user_password);
+    @POST("/login")
+    Observable<HttpResult<LoginBean>> login(@Query("userName") String userName,
+                                            @Query("pwd") String pwd
+                                            );
 
     /**
      * apk文件下载

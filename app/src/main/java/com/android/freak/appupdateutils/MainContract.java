@@ -15,6 +15,7 @@ public interface MainContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void doLogin();
+        void doLogin(String userName,String pwd);
+
     }
 }
