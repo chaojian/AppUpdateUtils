@@ -36,6 +36,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity
+            android:name=".RxBusActivity"
+            android:label="@string/title_activity_rx_bus"></activity>
     </application>
 
 </manifest>

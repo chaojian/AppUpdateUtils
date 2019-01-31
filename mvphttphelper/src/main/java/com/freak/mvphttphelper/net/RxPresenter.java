@@ -1,5 +1,6 @@
 package com.freak.mvphttphelper.net;
 
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -36,6 +37,7 @@ public class RxPresenter<T extends RxBaseView> implements BasePresenter<T> {
 
     /**
      * RxJava绑定
+     * 添加订阅
      *
      * @param observable
      * @param subscriber
@@ -52,7 +54,7 @@ public class RxPresenter<T extends RxBaseView> implements BasePresenter<T> {
     }
 
     /**
-     * 附加view
+     * 绑定view
      *
      * @param view
      */

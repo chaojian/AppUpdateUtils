@@ -53,6 +53,9 @@ public class App extends Application {
                 .build();
         //log日志打印框架Logger
         Logger.addLogAdapter(new AndroidLogAdapter(mFormatStrategy));
+//        HttpMethods.setConnectTimeOut(6);
+//        HttpMethods.setReadTimeOut(10);
+//        HttpMethods.setWriteTimeOut(10);
         HttpMethods.setBaseUrl(Constants.BASE_URL);
     }
 

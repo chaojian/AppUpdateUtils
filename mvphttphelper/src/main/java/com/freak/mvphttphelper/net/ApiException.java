@@ -1,6 +1,7 @@
 package com.freak.mvphttphelper.net;
 
 /**
+ * 自定义api异常
  * @author freak
  * @date 2019/01/25
  */

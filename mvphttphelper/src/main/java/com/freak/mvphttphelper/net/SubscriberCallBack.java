@@ -45,7 +45,7 @@ public class SubscriberCallBack extends Subscriber {
                 msg = "连接超时，请检查您的网络状态";
                 apiCallback.onFailure(msg);
             } else if (e instanceof JsonSyntaxException){
-                Log.e("json", "JSON解析错误，请查看JSON结构", e);
+                Log.e("SubscriberCallBack", "JSON解析错误，请查看JSON结构", e);
                 e.printStackTrace();
                 apiCallback.onFailure(e.getMessage());
             }else {

@@ -7,8 +7,13 @@ import android.widget.TextView;
 
 import com.android.freak.appupdateutils.app.BaseActivity;
 import com.android.freak.appupdateutils.bean.LoginBean;
+import com.android.freak.appupdateutils.event.RxEvent;
 import com.freak.appupdateutils.appupdateutils.AppUtils;
+import com.freak.mvphttphelper.net.RxBus;
 import com.orhanobut.logger.Logger;
+
+import rx.Subscription;
+import rx.functions.Action1;
 
 
 /**
@@ -18,6 +23,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     private final static String TAG = "MainActivity";
     private EditText username, pwd;
     private TextView tvResult;
+    private Subscription mSubscribe;
 
     @Override
     protected int getLayout() {
@@ -29,6 +35,15 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
         username = findViewById(R.id.username);
         pwd = findViewById(R.id.pwd);
         tvResult = findViewById(R.id.result);
+        mSubscribe = RxBus.getDefault().tObservable(RxEvent.class).subscribe(new Action1<RxEvent>() {
+            @Override
+            public void call(RxEvent rxEvent) {
+                if (rxEvent.getCode() == 1000) {
+                    username.setText(rxEvent.getUserName());
+                    pwd.setText(rxEvent.getPassWord());
+                }
+            }
+        });
     }
 
     @Override
@@ -71,5 +86,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements MainCon
     @Override
     public void showResult(String result) {
         tvResult.setText(result);
+    }
+
+    public void rxBusOnclick(View view) {
+        RxBusActivity.startAction(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSubscribe != null) {
+            if (mSubscribe.isUnsubscribed()) {
+                mSubscribe.unsubscribe();
+            }
+        }
     }
 }

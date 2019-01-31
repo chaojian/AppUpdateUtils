@@ -1,7 +1,6 @@
 package com.freak.mvphttphelper.net;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import rx.functions.Func1;
 
@@ -17,7 +16,6 @@ public class HttpResultFunc<T> implements Func1<AbstractHttpResult<T>, T> {
     public T call(AbstractHttpResult<T> tHttpResult) {
         //int类型结果码
         if (TextUtils.isEmpty(tHttpResult.getStringSuccessCode())) {
-            Log.e("HttpResultFunc", "int结果码" + tHttpResult.getIntResultCode() + "\n设置的int结果码" + tHttpResult.getIntSuccessCode());
             if (tHttpResult.getIntResultCode() != tHttpResult.getIntSuccessCode()) {
                 int[] otherCode = tHttpResult.getIntOtherCode();
                 for (int code : otherCode) {
@@ -30,7 +28,6 @@ public class HttpResultFunc<T> implements Func1<AbstractHttpResult<T>, T> {
             return tHttpResult.getResultData();
         } else {
             //string类型结果码
-            Log.e("HttpResultFunc", "结果码" + tHttpResult.getStringResultCode() + "\n设置的结果码" + tHttpResult.getStringSuccessCode());
             if (!tHttpResult.getStringSuccessCode().equals(tHttpResult.getStringResultCode())) {
                 String[] otherCode = tHttpResult.getStringOtherCode();
                 for (String code : otherCode) {
